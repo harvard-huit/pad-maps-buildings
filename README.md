@@ -1,4 +1,4 @@
-# pad-maps-buildings
+# Postman Artifacts for Planning and Design Maps Building API 
 Postman collection and environment for use with Planning and Design's Maps Buildings API - provides examples of use cases and expected responses.
 
 ## Instructions
