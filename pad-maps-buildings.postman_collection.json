@@ -1,0 +1,1013 @@
+{
+	"info": {
+		"_postman_id": "57443f37-f678-49a1-b84f-9fd2943a9dab",
+		"name": "pad-maps-buildings",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18029068",
+		"_collection_link": "https://huit-hapi.postman.co/workspace/apigee-api~f71d1411-7200-4e55-8b40-8e3af2d6f4d7/collection/18029068-57443f37-f678-49a1-b84f-9fd2943a9dab?action=share&creator=18029068&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "root path",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Not found\", function() {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"response object is empty\", function(){",
+							"    pm.expect(Object.keys(pm.response.json()).length).to.be.eq(0);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buildings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test Description: Verify that a status code of 200 is returned",
+							"pm.test(\"Status code is 200\", function () {",
+							"    // console.log(pm.response.code);",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test Description: Verify that a response is received in less than 2 seconds",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"//Test Description: Verify the response contains the expected Content-Type",
+							"pm.test(\"Content-Type is present and correct\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Result count present and great than to 1\", function() {",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.gt(1);",
+							"});",
+							"",
+							"pm.test(\"buildings array present with many members\", function() {",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings.length).to.be.gt(1);",
+							"});",
+							"",
+							"const buildings = responseJson.buildings;",
+							"",
+							"pm.test(\"Confirm fields present for each response\", function() {",
+							"    buildings.forEach((building) => {",
+							"        pm.expect(building).has.property('country');",
+							"        pm.expect(building).has.property('address');",
+							"        pm.expect(building).has.property('province');",
+							"        pm.expect(building).has.property('facility_number');",
+							"        pm.expect(building).has.property('name');",
+							"        pm.expect(building).has.property('locality');",
+							"        pm.expect(building).has.property('facility_id');",
+							"        pm.expect(building).has.property('description');",
+							"        pm.expect(building).has.property('postal_code');",
+							"        pm.expect(building).has.property('centroid-long');",
+							"        pm.expect(building).has.property('centroid-lat');",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building root",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test Description: Verify that a status code of 200 is returned",
+							"pm.test(\"Status code is 200\", function () {",
+							"    // console.log(pm.response.code);",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test Description: Verify that a response is received in less than 2 seconds",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"//Test Description: Verify the response contains the expected Content-Type",
+							"pm.test(\"Content-Type is present and correct\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Result count present and equal to 1\", function() {",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.eq(1);",
+							"})",
+							"",
+							"pm.test(\"buildings array present with 1 member\", function() {",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings.length).to.be.eq(1);",
+							"});",
+							"",
+							"const building = responseJson.buildings[0];",
+							"",
+							"pm.test(\"verify result building country\", function() {",
+							"    pm.expect(building.country).to.be.eq('US');",
+							"});",
+							"",
+							"pm.test(\"verify result building address\", function() {",
+							"    pm.expect(building.address).to.be.eq('23 Harvard Yard');",
+							"});",
+							"",
+							"pm.test(\"verify result building province\", function() {    ",
+							"    pm.expect(building.province).to.be.eq('MA');",
+							"});",
+							"",
+							"pm.test(\"verify result building facility_number\", function() {",
+							"    pm.expect(parseInt(building.facility_number)).to.be.eq(parseInt(pm.environment.get('number')));",
+							"});",
+							"",
+							"pm.test(\"verify result building name\", function() {",
+							"    pm.expect(building.name).to.be.eq('Memorial Church Appleton Chapel');",
+							"});",
+							"",
+							"pm.test(\"verify result building locality\", function() {",
+							"    pm.expect(building.locality).to.be.eq('Cambridge');",
+							"});",
+							"",
+							"pm.test(\"verify result building facility_id\", function() {",
+							"    pm.expect(building.facility_id).to.be.eq('CA-' + pm.environment.get('root'));",
+							"});",
+							"",
+							"pm.test(\"verify result building description\", function() {",
+							"    pm.expect(building.description).to.be.eq(pm.environment.get('root'));",
+							"});",
+							"",
+							"pm.test(\"verify result building postal code\", function() {",
+							"    pm.expect(building.postal_code).to.be.eq('02138');",
+							"});",
+							"",
+							"pm.test(\"verify centroid-long\"), function() {",
+							"    pm.expect(building).has.property('centroid-long');",
+							"    pm.expect(building.centroid-long).to.be.eq(-71.11603476076708);",
+							"}",
+							"",
+							"pm.test(\"verify centroid-lat\"), function() {",
+							"    pm.expect(building).has.property('centroid-lat');",
+							"    pm.expect(building.centroid-long).to.be.eq(42.37489737305265);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/root/{{root}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"root",
+						"{{root}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building root 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Not found\", function() {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"response object has structure\", function(){",
+							"    pm.expect(Object.keys(responseJson).length).to.be.eq(2);",
+							"})",
+							"",
+							"pm.test(\"response object has 'resultCount' == 0\", function(){",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.eq(0);",
+							"})",
+							"",
+							"pm.test(\"response object has 'buildings' and array is empty\", function(){",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings).to.be.an('array');",
+							"    pm.expect(responseJson.buildings.length).to.be.eq(0);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/root/11111111",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"root",
+						"11111111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test Description: Verify that a status code of 200 is returned",
+							"pm.test(\"Status code is 200\", function () {",
+							"    // console.log(pm.response.code);",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test Description: Verify that a response is received in less than 2 seconds",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"//Test Description: Verify the response contains the expected Content-Type",
+							"pm.test(\"Content-Type is present and correct\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Result count present and equal to 1\", function() {",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.eq(1);",
+							"})",
+							"",
+							"pm.test(\"buildings array present with 1 member\", function() {",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings.length).to.be.eq(1);",
+							"});",
+							"",
+							"const building = responseJson.buildings[0];",
+							"",
+							"pm.test(\"verify result building country\", function() {",
+							"    pm.expect(building.country).to.be.eq('US');",
+							"});",
+							"",
+							"pm.test(\"verify result building address\", function() {",
+							"    pm.expect(building.address).to.be.eq('23 Harvard Yard');",
+							"});",
+							"",
+							"pm.test(\"verify result building province\", function() {    ",
+							"    pm.expect(building.province).to.be.eq('MA');",
+							"});",
+							"",
+							"pm.test(\"verify result building facility_number\", function() {",
+							"    pm.expect(parseInt(building.facility_number)).to.be.eq(parseInt(pm.environment.get('number')));",
+							"});",
+							"",
+							"pm.test(\"verify result building name\", function() {",
+							"    pm.expect(building.name).to.be.eq('Memorial Church Appleton Chapel');",
+							"});",
+							"",
+							"pm.test(\"verify result building locality\", function() {",
+							"    pm.expect(building.locality).to.be.eq('Cambridge');",
+							"});",
+							"",
+							"pm.test(\"verify result building facility_id\", function() {",
+							"    pm.expect(building.facility_id).to.be.eq('CA-' + pm.environment.get('root'));",
+							"});",
+							"",
+							"pm.test(\"verify result building description\", function() {",
+							"    pm.expect(building.description).to.be.eq(pm.environment.get('root'));",
+							"});",
+							"",
+							"pm.test(\"verify result building postal code\", function() {",
+							"    pm.expect(building.postal_code).to.be.eq('02138');",
+							"});",
+							"",
+							"pm.test(\"verify centroid-long\"), function() {",
+							"    pm.expect(building).has.property('centroid-long');",
+							"    pm.expect(building.centroid-long).to.be.eq(-71.11603476076708);",
+							"}",
+							"",
+							"pm.test(\"verify centroid-lat\"), function() {",
+							"    pm.expect(building).has.property('centroid-lat');",
+							"    pm.expect(building.centroid-long).to.be.eq(42.37489737305265);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/number/{{number}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"number",
+						"{{number}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building number 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Not found\", function() {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"response object has structure\", function(){",
+							"    pm.expect(Object.keys(responseJson).length).to.be.eq(2);",
+							"})",
+							"",
+							"pm.test(\"response object has 'resultCount' == 0\", function(){",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.eq(0);",
+							"})",
+							"",
+							"pm.test(\"response object has 'buildings' and array is empty\", function(){",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings).to.be.an('array');",
+							"    pm.expect(responseJson.buildings.length).to.be.eq(0);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/number/999",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"number",
+						"999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test Description: Verify that a status code of 200 is returned",
+							"pm.test(\"Status code is 200\", function () {",
+							"    // console.log(pm.response.code);",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test Description: Verify that a response is received in less than 2 seconds",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"//Test Description: Verify the response contains the expected Content-Type",
+							"pm.test(\"Content-Type is present and correct\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Result count present\", function() {",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"})",
+							"",
+							"pm.test(\"buildings array present\", function() {",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"});",
+							"",
+							"const buildings = responseJson.buildings;",
+							"",
+							"pm.test(\"verify result buildings address\", function() {",
+							"    buildings.forEach((building) => {",
+							"        console.log(building.description + ' -> ' + building.name + ' -> ' + building.address);",
+							"        pm.expect(building.address).contains(pm.environment.get('address'));",
+							"    });",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/address/{{address}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"address",
+						"{{address}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building address 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Not found\", function() {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"response object has structure\", function(){",
+							"    pm.expect(Object.keys(responseJson).length).to.be.eq(2);",
+							"})",
+							"",
+							"pm.test(\"response object has 'resultCount' == 0\", function(){",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.eq(0);",
+							"})",
+							"",
+							"pm.test(\"response object has 'buildings' and array is empty\", function(){",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings).to.be.an('array');",
+							"    pm.expect(responseJson.buildings.length).to.be.eq(0);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/address/depot",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"address",
+						"depot"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building locality",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test Description: Verify that a status code of 200 is returned",
+							"pm.test(\"Status code is 200\", function () {",
+							"    // console.log(pm.response.code);",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test Description: Verify that a response is received in less than 2 seconds",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"//Test Description: Verify the response contains the expected Content-Type",
+							"pm.test(\"Content-Type is present and correct\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Result count present\", function() {",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"})",
+							"",
+							"pm.test(\"buildings array present\", function() {",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"});",
+							"",
+							"const buildings = responseJson.buildings;",
+							"",
+							"/* ERROR : 160 Concord Avenue HCO Space - null country code",
+							"pm.test(\"verify result buildings country\", function() {",
+							"    buildings.forEach((building) => {",
+							"        console.log(building.description + ' -> ' + building.name + ' -> ' + building.country);",
+							"        pm.expect(building.country).to.be.eq('US');",
+							"    });",
+							"});",
+							"*/",
+							"",
+							"pm.test(\"verify result building province\", function() {   ",
+							"    buildings.forEach((building) => { ",
+							"        pm.expect(building.province).to.be.eq('MA');",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"verify result building locality\", function() {   ",
+							"    buildings.forEach((building) => { ",
+							"        console.log(building.description + ' -> ' + building.name + ' -> ' + building.locality);",
+							"",
+							"        pm.expect(building.locality).to.be.eq('Cambridge');",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"verify result building postal code\", function() {",
+							"    buildings.forEach((building) => {",
+							"        pm.expect(building.postal_code).to.be.oneOf(['02134','02138','02139','02142','02143']);",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/locality/{{locality}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"locality",
+						"{{locality}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building locality 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Not found\", function() {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"response object has structure\", function(){",
+							"    pm.expect(Object.keys(responseJson).length).to.be.eq(2);",
+							"})",
+							"",
+							"pm.test(\"response object has 'resultCount' == 0\", function(){",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.eq(0);",
+							"})",
+							"",
+							"pm.test(\"response object has 'buildings' and array is empty\", function(){",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings).to.be.an('array');",
+							"    pm.expect(responseJson.buildings.length).to.be.eq(0);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/locality/new york",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"locality",
+						"new york"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building locality partial",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test Description: Verify that a status code of 200 is returned",
+							"pm.test(\"Status code is 200\", function () {",
+							"    // console.log(pm.response.code);",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test Description: Verify that a response is received in less than 2 seconds",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"//Test Description: Verify the response contains the expected Content-Type",
+							"pm.test(\"Content-Type is present and correct\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Result count present\", function() {",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"})",
+							"",
+							"pm.test(\"buildings array present\", function() {",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"});",
+							"",
+							"const buildings = responseJson.buildings;",
+							"",
+							"/* ERROR : 160 Concord Avenue HCO Space - null country code",
+							"pm.test(\"verify result buildings country\", function() {",
+							"    buildings.forEach((building) => {",
+							"        console.log(building.description + ' -> ' + building.name + ' -> ' + building.country);",
+							"        pm.expect(building.country).to.be.eq('US');",
+							"    });",
+							"});",
+							"*/",
+							"",
+							"pm.test(\"verify result building province\", function() {   ",
+							"    buildings.forEach((building) => { ",
+							"        pm.expect(building.province).to.be.eq('MA');",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"verify result building locality\", function() {   ",
+							"    buildings.forEach((building) => { ",
+							"        console.log(building.description + ' -> ' + building.name + ' -> ' + building.locality);",
+							"",
+							"        pm.expect(building.locality).to.be.eq('Cambridge');",
+							"    });",
+							"});",
+							"",
+							"pm.test(\"verify result building postal code\", function() {",
+							"    buildings.forEach((building) => {",
+							"        pm.expect(building.postal_code).to.be.oneOf(['02134','02138','02139','02142','02143']);",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/locality/{{locality_partial}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"locality",
+						"{{locality_partial}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "building locality partial 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Not found\", function() {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"response object has structure\", function(){",
+							"    pm.expect(Object.keys(responseJson).length).to.be.eq(2);",
+							"})",
+							"",
+							"pm.test(\"response object has 'resultCount' == 0\", function(){",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.eq(0);",
+							"})",
+							"",
+							"pm.test(\"response object has 'buildings' and array is empty\", function(){",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings).to.be.an('array');",
+							"    pm.expect(responseJson.buildings.length).to.be.eq(0);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/locality/xyz",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"locality",
+						"xyz"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buildings postal code",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test Description: Verify that a status code of 200 is returned",
+							"pm.test(\"Status code is 200\", function () {",
+							"    // console.log(pm.response.code);",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test Description: Verify that a response is received in less than 2 seconds",
+							"pm.test(\"Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"",
+							"//Test Description: Verify the response contains the expected Content-Type",
+							"pm.test(\"Content-Type is present and correct\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"    pm.expect(pm.response.headers.get('content-type')).to.include('application/json');",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"Result count present\", function() {",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"})",
+							"",
+							"pm.test(\"buildings array present\", function() {",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"});",
+							"",
+							"const buildings = responseJson.buildings;",
+							"",
+							"/* ERROR : 160 Concord Avenue HCO Space - null country code",
+							"pm.test(\"verify result buildings country\", function() {",
+							"    buildings.forEach((building) => {",
+							"        console.log(building.description + ' -> ' + building.name + ' -> ' + building.country);",
+							"        pm.expect(building.country).to.be.eq('US');",
+							"    });",
+							"});",
+							"*/",
+							"",
+							"pm.test(\"verify result building province\", function() {   ",
+							"    buildings.forEach((building) => { ",
+							"        pm.expect(building.province).to.be.eq('MA');",
+							"    });",
+							"});",
+							"",
+							"/* ERROR: Holden Greeen Bldg H -> Somerville",
+							"pm.test(\"verify result building locality\", function() {   ",
+							"    buildings.forEach((building) => { ",
+							"        console.log(building.description + ' -> ' + building.name + ' -> ' + building.locality);",
+							"",
+							"        pm.expect(building.locality).to.be.eq('Cambridge');",
+							"    });",
+							"});",
+							"*/",
+							"",
+							"pm.test(\"verify result building postal code\", function() {",
+							"    buildings.forEach((building) => {",
+							"        pm.expect(building.postal_code).to.be.eq('02138');",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/postalCode/{{postalCode}}",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"postalCode",
+						"{{postalCode}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buildings postal code 404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Not found\", function() {",
+							"    pm.response.to.have.status(404);",
+							"});",
+							"",
+							"const responseJson = pm.response.json();",
+							"",
+							"pm.test(\"response object has structure\", function(){",
+							"    pm.expect(Object.keys(responseJson).length).to.be.eq(2);",
+							"})",
+							"",
+							"pm.test(\"response object has 'resultCount' == 0\", function(){",
+							"    pm.expect(responseJson).to.have.property('resultCount');",
+							"    pm.expect(responseJson.resultCount).to.be.eq(0);",
+							"})",
+							"",
+							"pm.test(\"response object has 'buildings' and array is empty\", function(){",
+							"    pm.expect(responseJson).to.have.property('buildings');",
+							"    pm.expect(responseJson.buildings).to.be.an('array');",
+							"    pm.expect(responseJson.buildings.length).to.be.eq(0);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{host}}/{{base_path}}/buildings/postalCode/04915",
+					"protocol": "https",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"{{base_path}}",
+						"buildings",
+						"postalCode",
+						"04915"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{apikey}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
